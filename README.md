@@ -40,13 +40,18 @@ JSON output:
 oss-security-policy-check /path/to/project --format json
 ```
 
+Markdown report:
+
+```bash
+oss-security-policy-check /path/to/project --format markdown
+```
+
 ## Why this exists
 
 Security reporting is often treated as optional until the moment it matters. This tool gives maintainers a small, local checklist for making vulnerability handling easier to find and easier to follow.
 
 ## Roadmap
 
-- Markdown report output
 - Suggested `SECURITY.md` template generation
 - GitHub security advisory readiness checks
 - Dependency workflow detection across ecosystems
