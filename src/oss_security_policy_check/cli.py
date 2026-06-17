@@ -8,6 +8,30 @@ from pathlib import Path
 from .checker import SecurityReport, check_security_policy
 
 
+SECURITY_TEMPLATE = """# Security Policy
+
+## Reporting a Vulnerability
+
+Please report suspected vulnerabilities privately before sharing public details.
+
+Include:
+
+- A short description of the issue
+- Steps to reproduce
+- Potential impact or severity
+- Affected versions, packages, or dependencies
+- Suggested mitigation, if known
+
+## Supported Versions
+
+The latest release and the current main branch are supported unless documented otherwise.
+
+## Responsible Disclosure
+
+Please give maintainers a reasonable opportunity to investigate and coordinate a fix before public disclosure.
+"""
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="oss-security-policy-check",
@@ -16,7 +40,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("path", nargs="?", default=".", help="Repository path to check")
     parser.add_argument("--min-score", type=int, default=70, help="Minimum passing score")
     parser.add_argument("--format", choices=("text", "json", "markdown"), default="text")
+    parser.add_argument("--print-template", action="store_true", help="Print a starter SECURITY.md template and exit")
     args = parser.parse_args(argv)
+
+    if args.print_template:
+        print(SECURITY_TEMPLATE, end="")
+        return 0
 
     try:
         report = check_security_policy(Path(args.path))

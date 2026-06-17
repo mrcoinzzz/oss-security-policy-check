@@ -22,3 +22,13 @@ def test_cli_can_output_markdown(tmp_path: Path, capsys) -> None:
     assert "# OSS Security Policy Check" in output
     assert "| Status | Check | Detail |" in output
     assert "| PASS | Security policy | SECURITY.md found |" in output
+
+
+def test_cli_can_print_security_template(capsys) -> None:
+    exit_code = main(["--print-template"])
+
+    assert exit_code == 0
+    output = capsys.readouterr().out
+    assert "# Security Policy" in output
+    assert "Reporting a Vulnerability" in output
+    assert "Supported Versions" in output

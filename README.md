@@ -46,13 +46,18 @@ Markdown report:
 oss-security-policy-check /path/to/project --format markdown
 ```
 
+Print a starter `SECURITY.md` template:
+
+```bash
+oss-security-policy-check --print-template
+```
+
 ## Why this exists
 
 Security reporting is often treated as optional until the moment it matters. This tool gives maintainers a small, local checklist for making vulnerability handling easier to find and easier to follow.
 
 ## Roadmap
 
-- Suggested `SECURITY.md` template generation
 - GitHub security advisory readiness checks
 - Dependency workflow detection across ecosystems
 - Optional OpenAI-assisted policy review
