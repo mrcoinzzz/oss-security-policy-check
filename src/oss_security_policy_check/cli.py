@@ -41,11 +41,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-score", type=int, default=70, help="Minimum passing score")
     parser.add_argument("--format", choices=("text", "json", "markdown"), default="text")
     parser.add_argument("--print-template", action="store_true", help="Print a starter SECURITY.md template and exit")
+    parser.add_argument("--write-template", help="Write a starter SECURITY.md template to a file and exit")
+    parser.add_argument("--force", action="store_true", help="Allow --write-template to overwrite an existing file")
     args = parser.parse_args(argv)
 
     if args.print_template:
         print(SECURITY_TEMPLATE, end="")
         return 0
+    if args.write_template:
+        return _write_template(Path(args.write_template), args.force)
 
     try:
         report = check_security_policy(Path(args.path))
@@ -114,6 +118,22 @@ def _markdown(report: SecurityReport, min_score: int) -> str:
         lines.append(f"| {status} | {check.name} | {check.detail} |")
 
     return "\n".join(lines)
+
+
+def _write_template(path: Path, force: bool) -> int:
+    if path.exists() and not force:
+        print(f"Template target already exists: {path}", file=sys.stderr)
+        return 2
+
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(SECURITY_TEMPLATE, encoding="utf-8")
+    except OSError as error:
+        print(f"Could not write security template: {error}", file=sys.stderr)
+        return 2
+
+    print(f"Wrote security template: {path}")
+    return 0
 
 
 if __name__ == "__main__":

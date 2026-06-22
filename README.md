@@ -52,6 +52,14 @@ Print a starter `SECURITY.md` template:
 oss-security-policy-check --print-template
 ```
 
+Write a starter template to a file:
+
+```bash
+oss-security-policy-check --write-template SECURITY.md
+```
+
+Use `--force` to overwrite an existing target file.
+
 ## Why this exists
 
 Security reporting is often treated as optional until the moment it matters. This tool gives maintainers a small, local checklist for making vulnerability handling easier to find and easier to follow.

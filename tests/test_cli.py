@@ -32,3 +32,24 @@ def test_cli_can_print_security_template(capsys) -> None:
     assert "# Security Policy" in output
     assert "Reporting a Vulnerability" in output
     assert "Supported Versions" in output
+
+
+def test_cli_can_write_security_template(tmp_path: Path, capsys) -> None:
+    target = tmp_path / "SECURITY.md"
+
+    exit_code = main(["--write-template", str(target)])
+
+    assert exit_code == 0
+    assert "Wrote security template" in capsys.readouterr().out
+    assert "Reporting a Vulnerability" in target.read_text(encoding="utf-8")
+
+
+def test_cli_refuses_to_overwrite_template_without_force(tmp_path: Path, capsys) -> None:
+    target = tmp_path / "SECURITY.md"
+    target.write_text("existing\n", encoding="utf-8")
+
+    exit_code = main(["--write-template", str(target)])
+
+    assert exit_code == 2
+    assert "already exists" in capsys.readouterr().err
+    assert target.read_text(encoding="utf-8") == "existing\n"

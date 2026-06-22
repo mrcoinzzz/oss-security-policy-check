@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added `--write-template` with overwrite protection for creating `SECURITY.md`
 - Added `--print-template` for generating a starter `SECURITY.md`
 - Added Markdown report output with `--format markdown`
 
