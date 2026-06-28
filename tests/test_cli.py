@@ -53,3 +53,16 @@ def test_cli_refuses_to_overwrite_template_without_force(tmp_path: Path, capsys)
     assert exit_code == 2
     assert "already exists" in capsys.readouterr().err
     assert target.read_text(encoding="utf-8") == "existing\n"
+
+
+def test_cli_can_write_security_report_to_file(tmp_path: Path, capsys) -> None:
+    (tmp_path / "SECURITY.md").write_text("Report vulnerabilities by email.", encoding="utf-8")
+    output_path = tmp_path / "reports" / "security.md"
+
+    exit_code = main([str(tmp_path), "--min-score", "0", "--format", "markdown", "--output", str(output_path)])
+
+    assert exit_code == 0
+    assert capsys.readouterr().out == ""
+    output = output_path.read_text(encoding="utf-8")
+    assert "# OSS Security Policy Check" in output
+    assert "| PASS | Security policy | SECURITY.md found |" in output

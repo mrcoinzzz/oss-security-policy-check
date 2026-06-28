@@ -46,6 +46,12 @@ Markdown report:
 oss-security-policy-check /path/to/project --format markdown
 ```
 
+Write a report to a file:
+
+```bash
+oss-security-policy-check /path/to/project --format markdown --output security-report.md
+```
+
 Print a starter `SECURITY.md` template:
 
 ```bash

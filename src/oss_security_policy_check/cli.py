@@ -40,6 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("path", nargs="?", default=".", help="Repository path to check")
     parser.add_argument("--min-score", type=int, default=70, help="Minimum passing score")
     parser.add_argument("--format", choices=("text", "json", "markdown"), default="text")
+    parser.add_argument("--output", help="Write the security report to a file")
     parser.add_argument("--print-template", action="store_true", help="Print a starter SECURITY.md template and exit")
     parser.add_argument("--write-template", help="Write a starter SECURITY.md template to a file and exit")
     parser.add_argument("--force", action="store_true", help="Allow --write-template to overwrite an existing file")
@@ -58,11 +59,23 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     if args.format == "json":
-        print(_json(report))
+        output = _json(report)
     elif args.format == "markdown":
-        print(_markdown(report, args.min_score))
+        output = _markdown(report, args.min_score)
     else:
-        print(_text(report, args.min_score))
+        output = _text(report, args.min_score)
+
+    if args.output:
+        try:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(output + "\n", encoding="utf-8")
+        except OSError as error:
+            print(f"Could not write security report: {error}", file=sys.stderr)
+            return 2
+    else:
+        print(output)
+
     return 0 if report.score >= args.min_score else 1
 
 
